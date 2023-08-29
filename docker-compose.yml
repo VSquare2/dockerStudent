@@ -1,0 +1,39 @@
+version: "3"
+services:
+  # The application image
+  student_microservice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_HOST: 'mysql_db'
+      MYSQL_USER: 'root'
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_PORT: '3306'
+    ports:
+      - 8080:8080
+    networks:
+      - student
+    depends_on:
+      - mysql_db
+      
+  mysql_db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'mydatabase'
+      MYSQL_PASSWORD: 'root'
+      MYSQL_ROOT_PASSWORD: 'root'
+      
+      
+    ports:
+      - 3307:3306
+    expose:
+      - '3306'
+    networks:
+      - student
+      
+networks:
+  student:
+    driver: bridge     
+
